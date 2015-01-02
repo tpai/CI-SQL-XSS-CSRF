@@ -1,14 +1,23 @@
-CI_SQL_XSS_CSRF
+Hack Simulator based on Codeigniter
 ============
-以動態方式呈現SQL Injection、XSS及CSRF，基於CodeIgniter框架。
 
-簡介
-----
-用途主要是拿來介紹跟說明SQL Injection、XSS及CSRF。
+This is for introducing SQL injection, XSS and CSRF.
 
-全程都是用JS寫的，至於為什麼用這框架？只是因為主題是CI... (踹飛
+Setup
+--
 
-模式：
-* 正常使用
-* 攻擊模擬
-* 預防措施
+1. git clone https://github.com/tpai/CI-SQL-XSS-CSRF.git
+2. unzip to the htdoc folder of your web server.
+3. modify .htaccess (becuz I use 'CI-SQL-XSS-CSRF' as default)
+
+```
+RewriteEngine on
+RewriteBase /[name-of-this-folder]/
+RewriteCond $1 !^(index\.php|assets|images|robots\.txt|$)
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
+```
+
+Screenshot
+---
+
+![](http://i.imgur.com/YcupUxf.png)

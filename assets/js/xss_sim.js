@@ -1,12 +1,12 @@
 var stage, counter
 
-//上色
+//put on color
 var highlight = function(str, color) {
 	if(color == null)color = "blue"
 	return "<font color='"+color+"'>"+str+"</font>"
 };
 
-//初始化
+//init
 var empty_all = function() {
 	counter = -1
 	$("#name").prop("value", "")
@@ -18,54 +18,54 @@ var empty_all = function() {
 };
 empty_all()
 
-//上一步
+//previous
 $("#prev").click(function() {
 	if(counter > 0)counter --
 	motion[stage][counter]()
 })
 
-//下一步
+//next
 $("#next").click(function() {
 	if(counter < motion[stage].length - 1)counter ++
 	motion[stage][counter]()
 })
 
-//正常使用
+//original use
 $("#start").click(function() {
 	empty_all()
 	stage = "start"
 })
 
-//攻擊模擬
+//hacking
 $("#attack").click(function() {
 	empty_all()
 	stage = "attack"
 })
 
-//預防措施
+//prevention
 $("#avoid").click(function() {
 	empty_all()
 	stage = "avoid"
 })
 
-//動作
+//steps
 var motion = {
 	"start": [
 		function() {
-			$("#msg").html("這是一個常見的留言表單")
+			$("#msg").html("This is a regular form.")
 			$("#name").prop("value", "")
 			$("#email").prop("value", "")
 			$("#content").prop("value", "")
 		},
 		function() {
-			$("#msg").html("使用者填入姓名、E-Mail及留言")
+			$("#msg").html("User fill out the form.")
 			$("#name").prop("value", "iamuser")
 			$("#email").prop("value", "iam@user.com")
 			$("#content").prop("value", "Hello World!")
 			$("#demo").html("")
 		},
 		function() {
-			$("#msg").html("在送出表單之前 先來看看這段新增留言的SQL語法")
+			$("#msg").html("Before submit it, let's take a look to this SQL for adding reply.")
 			sql = "insert into messages(name, email, content) values('\"."+highlight("$name")+".\"', '\"."+highlight("$email")+".\"', '\"."+highlight("$content")+".\"')";
 			$("#demo").html(highlight("$name")+" = $this->db->escape("+highlight("$this->input->post('name')", "darkOrange")+");\n"+
 				highlight("$email")+" = $this->db->escape("+highlight("$this->input->post('email')", "darkOrange")+");\n"+
@@ -73,7 +73,7 @@ var motion = {
 				"$sql = \""+sql+"\";")
 		},
 		function() {
-			$("#msg").html("現在將表單送出 代入參數產生SQL語法")
+			$("#msg").html("Now submit the form, and generate SQL statement with parameters.")
 			name = $("#name").prop("value")
 			email = $("#email").prop("value")
 			content = $("#content").prop("value")
@@ -81,35 +81,35 @@ var motion = {
 			$("#demo").html("$sql = \""+sql+"\";")
 		},
 		function() {
-			$("#msg").html("送至資料庫儲存")
+			$("#msg").html("And query database.")
 			$("#demo").html("$this->db->query(\""+sql+"\");")
 			$("#result").html("")
 		},
 		function() {
-			$("#msg").html("完成新增留言 產生結果如下")
-			$("#result").html("<h3>新留言</h3>姓名："+name+"\nE-Mail："+email+"\n留言內容："+content)
+			$("#msg").html("Finished adding reply, here's results.")
+			$("#result").html("<h3>Reply</h3>Name："+name+"\nE-Mail："+email+"\nConcept："+content)
 		},
 		function() {
-			$("#msg").html("模擬結束")
+			$("#msg").html("Simulation done.")
 			window.scrollTo(0, 0)
 		}
 	],
 	"attack": [
 		function() {
-			$("#msg").html("這是一個常見的留言表單")
+			$("#msg").html("This is a regular form.")
 			$("#name").prop("value", "")
 			$("#email").prop("value", "")
 			$("#content").prop("value", "")
 		},
 		function() {
-			$("#msg").html("黑客填入姓名、E-Mail及含有不法字元的留言")
+			$("#msg").html("Hacker fill up the form with illegal characters.")
 			$("#name").prop("value", "iamuser")
 			$("#email").prop("value", "iam@user.com")
 			$("#content").prop("value", "I say...<script>alert('Hello World!');</script>")
 			$("#demo").html("")
 		},
 		function() {
-			$("#msg").html("這段語法有做到跳脫字元防止SQL Injection 卻沒有確實檢查輸入資料是否含有不法標籤")
+			$("#msg").html("This statement escape queries but it doesn't check the <script> tag.")
 			sql = "insert into messages(name, email, content) values('\"."+highlight("$name")+".\"', '\"."+highlight("$email")+".\"', '\"."+highlight("$content")+".\"')";
 			$("#demo").html(highlight("$name")+" = $this->db->escape("+highlight("$this->input->post('name')", "darkOrange")+");\n"+
 				highlight("$email")+" = $this->db->escape("+highlight("$this->input->post('email')", "darkOrange")+");\n"+
@@ -117,7 +117,7 @@ var motion = {
 				"$sql = \""+sql+"\";")
 		},
 		function() {
-			$("#msg").html("現在將表單送出 代入參數產生SQL語法")
+			$("#msg").html("Now submit the form, and generate SQL statement with parameters.")
 			name = $("#name").prop("value")
 			email = $("#email").prop("value")
 			content = "I say...&lt;script&gt;alert('Hello World!');&lt;/script&gt;"
@@ -125,36 +125,36 @@ var motion = {
 			$("#demo").html("$sql = \""+sql+"\";")
 		},
 		function() {
-			$("#msg").html("送至資料庫儲存")
+			$("#msg").html("And query database.")
 			$("#demo").html("$this->db->query(\""+sql+"\");")
 			$("#result").html("")
 		},
 		function() {
 			content = content.replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-			$("#msg").html("完成新增留言 若此時跳出「Hello World!」訊息視窗代表已經被XSS了")
-			$("#result").html("<h3>新留言</h3>姓名："+name+"\nE-Mail："+email+"\n留言內容："+content)
+			$("#msg").html("Finished adding reply, but it has been hacked at the same time.")
+			$("#result").html("<h3>Reply</h3>Name："+name+"\nE-Mail："+email+"\nConcept："+content)
 		},
 		function() {
-			$("#msg").html("模擬結束")
+			$("#msg").html("Simulation done.")
 			window.scrollTo(0, 0)
 		}
 	],
 	"avoid": [
 		function() {
-			$("#msg").html("這是一個常見的留言表單")
+			$("#msg").html("This is a regular form.")
 			$("#name").prop("value", "")
 			$("#email").prop("value", "")
 			$("#content").prop("value", "")
 		},
 		function() {
-			$("#msg").html("黑客填入姓名、E-Mail及含有不法字元的留言")
+			$("#msg").html("Hacker fill up the form with illegal characters.")
 			$("#name").prop("value", "iamuser")
 			$("#email").prop("value", "iam@user.com")
 			$("#content").prop("value", "I say...<script>alert('Hello World!');</script>")
 			$("#demo").html("")
 		},
 		function() {
-			$("#msg").html("這段語法同時做到跳脫字元防止SQL Injection與去除不法標籤防止XSS\n(把post的第二個參數設定為TRUE就會過濾XSS)")
+			$("#msg").html("This statement escape quaries and remove <script> tag at the same time. (you just need to add TRUE as second parameter in post data)")
 			sql = "insert into messages(name, email, content) values('\"."+highlight("$name")+".\"', '\"."+highlight("$email")+".\"', '\"."+highlight("$content")+".\"')";
 			$("#demo").html(highlight("$name")+" = $this->db->escape("+highlight("$this->input->post('name', "+highlight("TRUE", "darkGreen")+")", "darkOrange")+");\n"+
 				highlight("$email")+" = $this->db->escape("+highlight("$this->input->post('email', "+highlight("TRUE", "darkGreen")+")", "darkOrange")+");\n"+
@@ -162,7 +162,7 @@ var motion = {
 				"$sql = \""+sql+"\";")
 		},
 		function() {
-			$("#msg").html("現在將表單送出 代入過濾XSS後的參數產生SQL語法")
+			$("#msg").html("Now submit the form, and generate SQL statement with safe parameters.")
 			name = $("#name").prop("value")
 			email = $("#email").prop("value")
 			content = "I say...[removed]alert('Hello World!');[removed]"
@@ -170,17 +170,17 @@ var motion = {
 			$("#demo").html("$sql = \""+sql+"\";")
 		},
 		function() {
-			$("#msg").html("送至資料庫儲存")
+			$("#msg").html("And query database.")
 			$("#demo").html("$this->db->query(\""+sql+"\");")
 			$("#result").html("")
 		},
 		function() {
 			content = content.replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-			$("#msg").html("完成新增留言 沒有彈出訊息視窗 防禦成功")
-			$("#result").html("<h3>新留言</h3>姓名："+name+"\nE-Mail："+email+"\n留言內容："+content)
+			$("#msg").html("Finished adding reply, no popup alert.")
+			$("#result").html("<h3>Reply</h3>Name："+name+"\nE-Mail："+email+"\nConcept："+content)
 		},
 		function() {
-			$("#msg").html("模擬結束")
+			$("#msg").html("Simulation done.")
 			window.scrollTo(0, 0)
 		}
 	]
